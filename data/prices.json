@@ -1,0 +1,27 @@
+[
+  {
+    "ItemName": "Beet",
+    "Price": "6",
+    "Id": 6
+  },
+  {
+    "ItemName": "Cabbage",
+    "Price": "4.5",
+    "Id": 7
+  },
+  {
+    "ItemName": "Tomatos",
+    "Price": "3",
+    "Id": 8
+  },
+  {
+    "ItemName": "Arguila",
+    "Price": "3.5",
+    "Id": 9
+  },
+  {
+    "ItemName": "Eggplant",
+    "Price": "2.4",
+    "Id": 10
+  }
+]

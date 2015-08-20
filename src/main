@@ -1,11 +1,18 @@
 from flask.ext.api import FlaskAPI
+from flask.ext.cors import CORS
+import json
 
 app = FlaskAPI(__name__)
-
-@app.route('/')
-def example():
-    return {'hello': 'world'}
+CORS(app)
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/api/prices")
+def helloWorld():
+  pricesStr = open('./../data/prices.json')
+  prices = json.load(pricesStr)
+  return prices
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=3001)

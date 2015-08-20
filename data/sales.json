@@ -1,0 +1,29 @@
+[
+  {
+    "Date": "2015-06-24T22:22:33.875Z",
+    "SaleDetails": [
+      {
+        "ItemName": "Carrots",
+        "Price": 1.6,
+        "Units": "9"
+      }
+    ],
+    "Id": 3
+  },
+  {
+    "Date": "2015-08-07T17:18:14.277Z",
+    "SaleDetails": [
+      {
+        "ItemName": "Guava",
+        "Price": "6",
+        "Units": "2"
+      },
+      {
+        "ItemName": "PopCorn",
+        "Price": "4.5",
+        "Units": "4"
+      }
+    ],
+    "Id": 4
+  }
+]
