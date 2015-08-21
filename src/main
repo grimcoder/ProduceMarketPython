@@ -1,4 +1,5 @@
 from flask.ext.api import FlaskAPI
+from flask import  request
 from flask.ext.cors import CORS
 import json
 
@@ -7,11 +8,17 @@ CORS(app)
 
 
 @app.route("/api/prices")
-def helloWorld():
+def prices():
   pricesStr = open('./../data/prices.json')
+  id = request.args.get('id')
   prices = json.load(pricesStr)
-  return prices
 
+  if (id):
+      return filter(
+          lambda i:
+          str(i['Id']) == id, prices)
+
+  return prices
 
 
 if __name__ == '__main__':
