@@ -13,8 +13,14 @@ class MemoryDB(object):
     def findNextID(arr):
         iDs = map(lambda i: i['Id'], arr)
         maxId = max(iDs)
-
         return maxId + 1
+
+    @staticmethod
+    def saveobjecttofile(data, filename):
+        f = open(filename, 'w')
+        string = json.dumps(data)
+        f.write(string)
+        return
 
     @staticmethod
     def getprices(id):
@@ -26,15 +32,32 @@ class MemoryDB(object):
 
     @staticmethod
     def upsertprices(data):
+        oldPrice = 'n/a'
         if (data.get('Id') == None):
+            Action = 'New'
             data['Id'] = MemoryDB.findNextID(MemoryDB.prices)
         else:
-            MemoryDB.deleteprices(data['Id'])
+            Action = 'Edit'
+            oldPrice = filter(lambda i: i['Id'] == int(data['Id']), MemoryDB.prices)[0]['Price']
+            MemoryDB.prices = filter(lambda i: i['Id'] != int(data['Id']), MemoryDB.prices)
+
         MemoryDB.prices.append(data)
+        data['Action'] = Action
+        data['priceWas'] = oldPrice
+        MemoryDB.priceChanges.append(data)
+        MemoryDB.saveobjecttofile(MemoryDB.prices,'./../data/prices.json')
+        MemoryDB.saveobjecttofile(MemoryDB.priceChanges,'./../data/priceChanges.json')
+
 
     @staticmethod
     def deleteprices(id):
+
+        data = filter(lambda i: i['Id'] == int(id), MemoryDB.prices)[0]
         MemoryDB.prices = filter(lambda i: i['Id'] != int(id), MemoryDB.prices)
+        MemoryDB.saveobjecttofile(MemoryDB.prices,'./../data/prices.json')
+        data['Action'] = "Delete"
+        MemoryDB.priceChanges.append(data)
+        MemoryDB.saveobjecttofile(MemoryDB.priceChanges,'./../data/priceChanges.json')
 
     @staticmethod
     def getsales(id):
@@ -51,10 +74,12 @@ class MemoryDB(object):
         else:
             MemoryDB.deletesales(data['Id'])
         MemoryDB.sales.append(data)
+        MemoryDB.saveobjecttofile(MemoryDB.sales,'./../data/sales.json')
 
     @staticmethod
     def deletesales(id):
         MemoryDB.sales = filter(lambda i: i['Id'] != int(id), MemoryDB.sales)
+        MemoryDB.saveobjecttofile(MemoryDB.sales,'./../data/sales.json')
 
     @staticmethod
     def getPriceChanges(id):

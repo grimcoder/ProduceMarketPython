@@ -1,6 +1,10 @@
 from flask.ext.api import FlaskAPI
 from flask import request
 from flask.ext.cors import CORS
+import sys
+
+if ('m' in sys.argv):
+    useMongo = True
 
 app = FlaskAPI(__name__)
 CORS(app)
