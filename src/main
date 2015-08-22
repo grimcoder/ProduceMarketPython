@@ -2,45 +2,25 @@ from flask.ext.api import FlaskAPI
 from flask import  request
 from flask.ext.cors import CORS
 
-import json
-
 app = FlaskAPI(__name__)
 CORS(app)
+from memorydb.DB import *
 
 @app.route("/api/prices")
 def prices():
     id = request.args.get('id')
-    from memorydb.DB import getprices
     return getprices(id)
 
 @app.route("/api/sales")
 def sales():
-  rowFile = open('./../data/sales.json')
-  id = request.args.get('id')
-  sales = json.load(rowFile)
-
-  if (id):
-      return filter(
-          lambda i:
-          str(i['Id']) == id, sales)
-
-  return sales
+    id = request.args.get('id')
+    return getsales(id)
 
 
 @app.route("/api/reports/prices")
 def priceChanges():
-  rowFile = open('./../data/priceChanges.json')
-  id = request.args.get('id')
-  priceChanges = json.load(rowFile)
-
-  if (id):
-      return filter(
-          lambda i:
-          str(i['Id']) == id, priceChanges)
-
-  return priceChanges
-
-
+    id = request.args.get('id')
+    return getPriceChanges(id)
 
 if __name__ == '__main__':
     app.run(debug=True, port=3001, threaded=True)
