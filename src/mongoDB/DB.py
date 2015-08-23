@@ -31,30 +31,23 @@ class DB(object):
         oldPrice = 'n/a'
         if (data.get('Id') == None):
             Action = 'New'
-            data['Id'] = DB.findNextID(DB.prices)
         else:
             Action = 'Edit'
-            oldPrice = filter(lambda i: i['Id'] == int(data['Id']), DB.prices)[0]['Price']
-            DB.prices = filter(lambda i: i['Id'] != int(data['Id']), DB.prices)
-
-        DB.prices.append(data)
+            oldPrice = DB.prices.find_one({'_id': ObjectId(data['Id'])})['Price']
+            DB.prices.delete_one({'_id': ObjectId(data['Id'])})
+        data['_id'] = ObjectId(data['Id'])
+        DB.prices.insert_one(data)
         data['Action'] = Action
         data['priceWas'] = oldPrice
-        DB.priceChanges.append(data)
-        DB.saveobjecttofile(DB.prices,'./../data/prices.json')
-        DB.saveobjecttofile(DB.priceChanges,'./../data/priceChanges.json')
-
+        data['_id'] = None
+        DB.pricechanges.insert_one(data)
 
     @staticmethod
     def deleteprices(id):
-
-        data = copy.deepcopy(filter(lambda i: i['Id'] == int(id), DB.prices)[0])
-
-        DB.prices = filter(lambda i: i['Id'] != int(id), DB.prices)
-        DB.saveobjecttofile(DB.prices,'./../data/prices.json')
+        data = DB.prices.find_one({'_id' : ObjectId(id)})
+        DB.prices.delete_one({'_id' : ObjectId(id)})
         data['Action'] = "Delete"
-        DB.priceChanges.append(data)
-        DB.saveobjecttofile(DB.priceChanges,'./../data/priceChanges.json')
+        DB.pricechanges.insert_one(data)
 
     @staticmethod
     def getsales(id):
@@ -64,17 +57,14 @@ class DB(object):
 
     @staticmethod
     def upsertsales(data):
-        if (data.get('Id') == None):
-            data['Id'] = DB.findNextID(DB.sales)
-        else:
-            DB.deletesales(data['Id'])
-        DB.sales.append(data)
-        DB.saveobjecttofile(DB.sales,'./../data/sales.json')
+        if (data.get('Id') != None):
+            DB.sales.delete_one({'_id': ObjectId(data['Id'])})
+        data['_id'] = ObjectId(data['Id'])
+        DB.sales.insert_one(data)
 
     @staticmethod
     def deletesales(id):
-        DB.sales = filter(lambda i: i['Id'] != int(id), DB.sales)
-        DB.saveobjecttofile(DB.sales,'./../data/sales.json')
+        DB.sales.delete_one({'_id' : ObjectId(id)})
 
     @staticmethod
     def getPriceChanges(id):
