@@ -1,39 +1,30 @@
-__author__ = 'taraskovtun'
-
-import pymongo
-
-import json
+import copy
+from bson import ObjectId
 
 
 class DB(object):
-
-    rowFile = open('./../data/prices.json')
-    prices = json.load(rowFile)
-    rowFile = open('./../data/sales.json')
-    sales = json.load(rowFile)
-    rowFile = open('./../data/priceChanges.json')
-    priceChanges = json.load(rowFile)
-
-    @staticmethod
-    def findNextID(arr):
-        iDs = map(lambda i: i['Id'], arr)
-        maxId = max(iDs)
-        return maxId + 1
+    from pymongo import MongoClient
+    client = MongoClient('localhost', 27017)
+    db = client.ProduceMarket
+    prices = db['prices']
+    sales = db['sales']
+    pricechanges = db['pricechanges']
 
     @staticmethod
-    def saveobjecttofile(data, filename):
-        f = open(filename, 'w')
-        string = json.dumps(data)
-        f.write(string)
-        return
+    def addIdVirtualField(data):
+        data['Id'] = str(data['_id'])
+        data['_id'] = data['Id']
+        return data
+
+    @staticmethod
+    def addIdtoList(arr):
+        return map(lambda i: DB.addIdVirtualField(i), arr)
 
     @staticmethod
     def getprices(id):
         if (id):
-            return filter(
-            lambda i:
-            int(i['Id']) == int(id), DB.prices)
-        return DB.prices
+            return DB.addIdtoList(DB.prices.find({u'_id': ObjectId(id)}))
+        return DB.addIdtoList(list(DB.prices.find()))
 
     @staticmethod
     def upsertprices(data):
@@ -57,7 +48,8 @@ class DB(object):
     @staticmethod
     def deleteprices(id):
 
-        data = filter(lambda i: i['Id'] == int(id), DB.prices)[0]
+        data = copy.deepcopy(filter(lambda i: i['Id'] == int(id), DB.prices)[0])
+
         DB.prices = filter(lambda i: i['Id'] != int(id), DB.prices)
         DB.saveobjecttofile(DB.prices,'./../data/prices.json')
         data['Action'] = "Delete"
@@ -66,11 +58,9 @@ class DB(object):
 
     @staticmethod
     def getsales(id):
-      if (id):
-          return filter(
-              lambda i:
-              str(i['Id']) == id, DB.sales)
-      return DB.sales
+        if (id):
+            return DB.addIdtoList(DB.sales.find({u'_id': ObjectId(id)}))
+        return DB.addIdtoList(list(DB.sales.find()))
 
     @staticmethod
     def upsertsales(data):
@@ -88,8 +78,6 @@ class DB(object):
 
     @staticmethod
     def getPriceChanges(id):
-      if (id):
-          return filter(
-              lambda i:
-              str(i['Id']) == id, DB.priceChanges)
-      return DB.priceChanges
+        if (id):
+            return DB.addIdtoList(DB.pricechanges.find({u'_id': ObjectId(id)}))
+        return DB.addIdtoList(list(DB.pricechanges.find()))

@@ -3,14 +3,14 @@ from flask import request
 from flask.ext.cors import CORS
 import sys
 
-if ('m' in sys.argv):
+if ('m' not in sys.argv):
     from memorydb.DB import *
 else:
     from mongoDB.DB import *
 
 app = FlaskAPI(__name__)
 CORS(app)
-from memorydb.DB import *
+
 
 @app.route("/api/prices", methods=['GET'])
 def prices():

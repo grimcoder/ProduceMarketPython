@@ -1,1 +1,24 @@
-[{"Price": "4.5", "ItemName": "Cabbage", "Id": 7}, {"Price": "3", "ItemName": "Tomatos", "Id": 8}, {"Price": "2.4", "ItemName": "Eggplant", "Id": 10}]
+[
+  {
+    "Price": "4.5",
+    "ItemName": "Cabbage",
+    "Id": 7
+  },
+  {
+    "Price": "3",
+    "ItemName": "Tomatos",
+    "Id": 8
+  },
+  {
+    "Price": "2.4",
+    "ItemName": "Eggplant",
+    "Id": 10
+  },
+  {
+    "Action": "New",
+    "Price": "4.5",
+    "ItemName": "Milk",
+    "Id": 12,
+    "priceWas": "n/a"
+  }
+]

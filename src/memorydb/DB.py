@@ -1,7 +1,6 @@
+import copy
 import json
-
 class DB(object):
-
     rowFile = open('./../data/prices.json')
     prices = json.load(rowFile)
     rowFile = open('./../data/sales.json')
@@ -42,21 +41,23 @@ class DB(object):
             DB.prices = filter(lambda i: i['Id'] != int(data['Id']), DB.prices)
 
         DB.prices.append(data)
-        data['Action'] = Action
-        data['priceWas'] = oldPrice
-        DB.priceChanges.append(data)
+        datafordelete = copy.deepcopy(data)
+        datafordelete['Action'] = Action
+        datafordelete['priceWas'] = oldPrice
+        DB.priceChanges.append(datafordelete)
+
         DB.saveobjecttofile(DB.prices,'./../data/prices.json')
         DB.saveobjecttofile(DB.priceChanges,'./../data/priceChanges.json')
-
 
     @staticmethod
     def deleteprices(id):
 
         data = filter(lambda i: i['Id'] == int(id), DB.prices)[0]
+        dataForDelete = copy.deepcopy(data)
         DB.prices = filter(lambda i: i['Id'] != int(id), DB.prices)
         DB.saveobjecttofile(DB.prices,'./../data/prices.json')
-        data['Action'] = "Delete"
-        DB.priceChanges.append(data)
+        dataForDelete['Action'] = "Delete"
+        DB.priceChanges.append(dataForDelete)
         DB.saveobjecttofile(DB.priceChanges,'./../data/priceChanges.json')
 
     @staticmethod
