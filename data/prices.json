@@ -1,24 +1,27 @@
 [
   {
-    "Price": "4.5",
+  "ItemName": "Beet",
+  "Price": 6.2,
+  "Id": 6
+},
+  {
     "ItemName": "Cabbage",
+    "Price": 4,
     "Id": 7
   },
   {
-    "Price": "3",
     "ItemName": "Tomatos",
+    "Price": 3,
     "Id": 8
   },
   {
-    "Price": "2.4",
-    "ItemName": "Eggplant",
-    "Id": 10
+    "ItemName": "Arguila",
+    "Price": 3.6,
+    "Id": 9
   },
   {
-    "Action": "New",
-    "Price": "4.5",
-    "ItemName": "Milk",
-    "Id": 12,
-    "priceWas": "n/a"
+    "ItemName": "Eggplant",
+    "Price": 3,
+    "Id": 10
   }
 ]
