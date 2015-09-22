@@ -53,4 +53,4 @@ def pricechanges():
     return DB.getPriceChanges(id)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3001, threaded=True)
+    app.run(debug=True, port=3001, threaded=True,host='0.0.0.0')
